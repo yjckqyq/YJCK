@@ -1,0 +1,43 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// 用于比较两个整数的函数，用于快速排序
+int cmp(const void *a, const void *b) {
+    return *(int *)a - *(int *)b;
+}
+
+int countTriangleCombinations(int nums[], int n) {
+    int count = 0;
+    qsort(nums, n, sizeof(int), cmp);  // 对数组进行排序，便于后续查找
+
+    // 使用双指针遍历数组
+    for (int i = 0; i < n - 2; i++) {
+        int k = i + 2;  // 最小的第三条边
+        for (int j = i + 1; j < n - 1; j++) {
+            // 查找最后一个满足条件的数
+            while (k < n && nums[i] + nums[j] > nums[k]) {
+                k++;
+            }
+            // 组合个数累加
+            count += k - j - 1;
+        }
+    }
+
+    return count;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    int nums[n];
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &nums[i]);
+    }
+
+    int combinations = countTriangleCombinations(nums, n);
+    printf("%d\n", combinations);
+
+    return 0;
+}
+ 
