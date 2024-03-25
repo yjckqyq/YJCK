@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+
+#define MAXSIZE 100
+
+typedef struct {
+    float data[MAXSIZE];
+    int top;
+} StackNode;
+
+float calculate_expression(char *exp) {
+    StackNode stack;
+    stack.top = -1;
+    
+    // 使用空格作为分隔符
+    char *token = strtok(exp, " ");
+    
+    while (token != NULL) {
+        if (isdigit(token[0]) || (token[0] == '-' && isdigit(token[1]))) {
+            float num = atof(token);
+            stack.data[++stack.top] = num;
+        } else {
+            // 确保栈中有至少两个元素
+            if(stack.top < 1) {
+                printf("Error: Not enough operands in stack for operation.\n");
+                return -1;
+            }
+            float b = stack.data[stack.top--];
+            float a = stack.data[stack.top--];
+            float result;
+            
+            switch(token[0]) {
+                case '+':
+                    result = a + b;
+                    break;
+                case '-':
+                    result = a - b;
+                    break;
+                case '*':
+                    result = a * b;
+                    break;
+                case '/':
+                    if(b == 0) {
+                        printf("Error: Division by zero.\n");
+                        return -1;
+                    }
+                    result = a / b;
+                    break;
+                default:
+                    printf("Error: Unknown operator.\n");
+                    return -1; 
+            }
+            
+            stack.data[++stack.top] = result;
+        }
+        
+        // 获取下一个token
+        token = strtok(NULL, " ");
+    }
+    
+    // 检查栈中是否只有一个元素，即结果
+    if(stack.top == 0) {
+        return stack.data[stack.top];
+    } else {
+        printf("Error: The user input has too many operands.\n");
+        return -1;
+    }
+}
+
+int main() {
+    // 输入表达式字符串，操作数和操作符之间用空格分隔
+    char exp[] = "3 1.5 4 * / 6 2 * + 5 1.25 * -";
+    float result = calculate_expression(exp);
+    
+    if (result != -1) {
+        printf("%f\n", result);
+    } else {
+        printf("Calculation error.\n");
+    }
+    
+    return 0;
+}
