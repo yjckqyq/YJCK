@@ -1,1 +1,1 @@
-这是C语言初学者的学习代码，欢迎各位大佬指教
+This is a c language beginners learning code,welcome you to teach old
