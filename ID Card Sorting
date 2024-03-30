@@ -1,0 +1,45 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+struct sh {
+    char id[20];
+};
+
+int bubble(struct sh s1, struct sh s2) {
+    char sub1[10];
+    char sub2[10];
+    strncpy(sub1, s1.id + 6, 8);
+    strncpy(sub2, s2.id + 6, 8);
+    sub1[8] = '\0';
+    sub2[8] = '\0';
+    return strcmp(sub2, sub1);
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    struct sh *s = (struct sh *)malloc(n * sizeof(struct sh));
+    for (int i = 0; i < n; i++) {
+        scanf("%s", s[i].id);
+    }
+
+    
+    for (int i = 0; i < n - 1; i++) {
+        for (int j = 0; j < n - i - 1; j++) {
+            if (bubble(s[j], s[j + 1]) > 0) {
+                struct sh temp = s[j];
+                s[j] = s[j + 1];
+                s[j + 1] = temp;
+            }
+        }
+    }
+
+    for (int i = 0; i < n; i++) {
+        printf("%s\n", s[i].id);
+    }
+
+    free(s);
+    return 0;
+}
