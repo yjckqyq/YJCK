@@ -1,0 +1,26 @@
+
+#include <stdio.h>
+
+int countPrimeFactors(int n) {
+    int count = 0;
+    int i;
+    for (i = 2; i * i <= n; i++) {
+        while (n % i == 0) {
+            count++;
+            n /= i;
+        }
+    }
+    if (n > 1) {
+        count++;
+    }
+    return count;
+}
+
+int main() {
+    int n;
+    while (scanf("%d", &n) && n != 0) {
+        int result = countPrimeFactors(n);
+        printf("%d\n", result);
+    }
+    return 0;
+}
